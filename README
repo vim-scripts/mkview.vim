@@ -1,0 +1,37 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=220
+
+This module provides functions which emulate the |mkview| function of vim
+without requiring the creation of |view-file|s. This is useful when you
+have an explorer type window with some arbitrary level of folding which
+needs to be remembered. This module is therefore of interest to script
+writers and not to the casual vim user.
+
+Synopsis:
+
+1. let viewInfo = MkView()
+   This returns a formatted string viewInfo (see file for the format) which
+   contains the minimal information needed to
+   . Restore manually folds. Restore manually opened and closed folds.
+     (this is the behavior of |mkview| when 'viewoptions' contains
+     "folds".
+   . Restore the cursor row and column position.
+   The file is allowed to have arbitrarily nested folds.
+   If there is prior information about the folds, then the following
+   variants described below can be used.
+
+2. let viewInfo  = MkViewNoFolds()
+   When it is known that there are no folds in the file, then use this
+   function. It will contain just the information needed to restore the
+   cursor row and column positions.
+
+3. let viewInfo = MkViewNoNestedFolds()
+   When it is known apriori that there are no folds with |foldlevel|
+   greater than 1, i.e, there are no nested folds, then use this function
+   which takes advantage of the fact to be faster than MkView(). Nested
+   folds, if they exist will be silently ignored if this function is used.
+
+4. call LoadView(viewInfo)
+   This function restores the fold state of the file as described in
+   MkView(). It eliminates the folds already in the file before restoring
+   the original fold state so that additional nestedness is not introduced.
+
